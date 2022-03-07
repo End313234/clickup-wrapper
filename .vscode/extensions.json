@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "streetsidesoftware.code-spell-checker",
+        "PKief.material-icon-theme",
+        "DaltonMenezes.aura-theme",
+        "eamodio.gitlens",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "golang.go",
+    ]
+}
