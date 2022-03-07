@@ -1,18 +1,13 @@
-package clickup
+package request
 
 import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"net/http"
-)
 
-type CustomRequest struct {
-	Method      string
-	URL         string
-	AccessToken string
-	Value       interface{}
-}
+	clickupError "github.com/End313234/clickup-wrapper/internal/errors"
+)
 
 func MakeRequest(req CustomRequest) error {
 	var client http.Client
@@ -30,7 +25,7 @@ func MakeRequest(req CustomRequest) error {
 	data, _ := ioutil.ReadAll(response.Body)
 
 	if response.StatusCode != 200 {
-		var err Error
+		var err clickupError.Error
 		json.Unmarshal(data, &err)
 		return errors.New(err.Err)
 	}

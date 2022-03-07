@@ -3,6 +3,9 @@ package clickup
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/End313234/clickup-wrapper/internal/constants"
+	"github.com/End313234/clickup-wrapper/internal/http/request"
 )
 
 // Represents a Clickup client
@@ -23,9 +26,9 @@ func (client *Client) GetSpace(spaceId string) (Space, error) {
 		return space, nil
 	}
 
-	err = MakeRequest(CustomRequest{
+	err = request.MakeRequest(request.CustomRequest{
 		Method:      "GET",
-		URL:         fmt.Sprintf("%s/space/%s", BASE_URL, spaceId),
+		URL:         fmt.Sprintf("%s/space/%s", constants.BASE_URL, spaceId),
 		AccessToken: client.AccessToken,
 		Value:       &space,
 	})
@@ -42,9 +45,9 @@ func (client *Client) GetSpace(spaceId string) (Space, error) {
 func (client *Client) GetSpaces(teamId string, archived bool) ([]Space, error) {
 	var spaces Spaces
 
-	err := MakeRequest(CustomRequest{
+	err := request.MakeRequest(request.CustomRequest{
 		Method:      "GET",
-		URL:         fmt.Sprintf("%s/team/%s/space?archived=%s", BASE_URL, teamId, strconv.FormatBool(archived)),
+		URL:         fmt.Sprintf("%s/team/%s/space?archived=%s", constants.BASE_URL, teamId, strconv.FormatBool(archived)),
 		AccessToken: client.AccessToken,
 		Value:       &spaces,
 	})
@@ -70,9 +73,9 @@ type Config struct {
 func New(config Config) (*Client, error) {
 	var currentUser Member
 
-	err := MakeRequest(CustomRequest{
+	err := request.MakeRequest(request.CustomRequest{
 		Method:      "GET",
-		URL:         fmt.Sprintf("%s/user", BASE_URL),
+		URL:         fmt.Sprintf("%s/user", constants.BASE_URL),
 		AccessToken: config.Token,
 		Value:       &currentUser,
 	})
