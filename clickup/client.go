@@ -5,11 +5,13 @@ import (
 	"strconv"
 )
 
+// Represents a Clickup client
 type Client struct {
 	AccessToken string
 	Cache       Cache
 }
 
+// Gets a Space by its ID
 func (client *Client) GetSpace(spaceId string) (Space, error) {
 	var space Space
 
@@ -36,6 +38,7 @@ func (client *Client) GetSpace(spaceId string) (Space, error) {
 	return space, nil
 }
 
+// Gets the spaces of a Team
 func (client *Client) GetSpaces(teamId string, archived bool) ([]Space, error) {
 	var spaces Spaces
 
@@ -58,10 +61,12 @@ func (client *Client) GetSpaces(teamId string, archived bool) ([]Space, error) {
 	return spaces.Spaces, nil
 }
 
+// Configuration for the client instance
 type Config struct {
 	Token string
 }
 
+// Makes a new client
 func New(config Config) (*Client, error) {
 	var currentUser Member
 
