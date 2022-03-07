@@ -9,7 +9,7 @@ import (
 
 func main() {
 	client, err := clickup.New(clickup.Config{
-		Token: "pk_43081155_BJ12D0ADF3SOHK2BC41DRDD11KBUD3BU",
+		Token: "your-token-goes-here",
 	})
 	if err != nil {
 		log.Fatal(err)
