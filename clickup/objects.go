@@ -67,10 +67,10 @@ type PrioritiesFeature struct {
 
 // Represents the check unresolved feature
 type CheckUnresolvedFeature struct {
-	Enabled    bool     `json:"enabled,omitempty"`
-	Subtasks   bool     `json:"subtasks,omitempty"`
-	Checklists []string `json:"checklists,omitempty"`
-	Comments   []string `json:"comments,omitempty"`
+	Enabled    bool `json:"enabled,omitempty"`
+	Subtasks   bool `json:"subtasks,omitempty"`
+	Checklists bool `json:"checklists,omitempty"`
+	Comments   bool `json:"comments,omitempty"`
 }
 
 // Represents Space features

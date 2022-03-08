@@ -1,8 +1,11 @@
 package clickup
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"strconv"
+	"strings"
 
 	"github.com/End313234/clickup-wrapper/internal/constants"
 	"github.com/End313234/clickup-wrapper/internal/http/request"
@@ -56,4 +59,27 @@ func (client *Client) GetSpaces(teamId string, archived bool) ([]Space, error) {
 	}
 
 	return spaces.Spaces, nil
+}
+
+// Creates a new Space.
+func (client *Client) CreateSpace(teamId string, space Space) (Space, error) {
+	var newSpace Space
+
+	data, _ := json.Marshal(space)
+	reader := ioutil.NopCloser(strings.NewReader(string(data[:])))
+	defer reader.Close()
+
+	err := request.MakeRequest(request.CustomRequest{
+		Method:      "POST",
+		URL:         fmt.Sprintf("%s/team/%s/space", constants.BASE_URL, teamId),
+		AccessToken: client.AccessToken,
+		Value:       &newSpace,
+		Body:        reader,
+	})
+	if err != nil {
+		return newSpace, err
+	}
+
+	client.Cache.Spaces.Add(space)
+	return newSpace, nil
 }

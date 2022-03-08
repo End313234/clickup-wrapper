@@ -15,6 +15,7 @@ func MakeRequest(req CustomRequest) error {
 	request, _ := http.NewRequest(req.Method, req.URL, nil)
 	request.Header.Add("Authorization", req.AccessToken)
 	request.Header.Add("Content-Type", "application/json")
+	request.Body = req.Body
 
 	response, err := client.Do(request)
 	if err != nil {
