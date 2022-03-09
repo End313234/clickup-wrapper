@@ -15,9 +15,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	space, err := client.CreateSpace("31026359", clickup.Space{
+	newSpace := clickup.Space{
 		Name: "Something",
-	})
+	}
+
+	space, err := newSpace.Create(client, "31026359")
 	if err != nil {
 		log.Fatal(err)
 	}

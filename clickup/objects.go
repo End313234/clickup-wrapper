@@ -21,15 +21,6 @@ type Member struct {
 	InvitedBy User `json:"invited_by,omitempty"`
 }
 
-// Represents a Clickup Team
-type Team struct {
-	Id      string   `json:"id,omitempty"`
-	Name    string   `json:"name,omitempty"`
-	Color   string   `json:"color,omitempty"`
-	Avatar  string   `json:"avatar,omitempty"`
-	Members []Member `json:"members,omitempty"`
-}
-
 // Represents a Clickup Status (currently used for `Statuses` property of a Space)
 type Status struct {
 	Status     string `json:"status,omitempty"`
@@ -92,17 +83,6 @@ type Features struct {
 	Zoom              BasicFeature           `json:"zoom,omitempty"`
 	Milestones        BasicFeature           `json:"milestones,omitempty"`
 	Emails            BasicFeature           `json:"emails,omitempty"`
-}
-
-// Represents a Clickup Space
-type Space struct {
-	Id                string   `json:"id,omitempty"`
-	Name              string   `json:"name,omitempty"`
-	Private           bool     `json:"private,omitempty"`
-	Statuses          []Status `json:"statuses,omitempty"`
-	MultipleAssignees bool     `json:"multiple_assignees,omitempty"`
-	Features          Features `json:"features,omitempty"`
-	Archived          bool     `json:"archived,omitempty"`
 }
 
 // Represents Clickup spaces (it's currently used in the return object of `GetSpaces`)
