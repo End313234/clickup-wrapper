@@ -13,6 +13,33 @@ type Client struct {
 	Cache       Cache
 }
 
+// Gets a Space by its ID
+func (client *Client) GetSpace(spaceId string) (Space, error) {
+	var space Space
+
+	space, err := client.Cache.Spaces.Find(func(s Space) bool {
+		return s.Id == spaceId
+	})
+	if err == nil {
+		client.Cache.Spaces.Add(space)
+		return space, nil
+	}
+
+	err = request.MakeRequest(request.CustomRequest{
+		Method:      "GET",
+		URL:         fmt.Sprintf("%s/space/%s", constants.BASE_URL, spaceId),
+		AccessToken: client.AccessToken,
+		Value:       &space,
+	})
+	if err != nil {
+		client.Cache.Spaces.Add(space)
+		return space, err
+	}
+
+	client.Cache.Spaces.Add(space)
+	return space, nil
+}
+
 // Configuration for the client instance
 type Config struct {
 	Token string
