@@ -8,8 +8,6 @@ Please check if your PR fulfills the following requirements:
 
 - [ ] I followed GitFlow pattern to create the branch
 - [ ] My code produces no warnings or errors in the console
-- [ ] Tests for the changes have been added / updated
-- [ ] Mocks fot the database have been added / updated
 
 ## PR Type
 
