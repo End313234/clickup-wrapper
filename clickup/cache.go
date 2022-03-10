@@ -1,13 +1,15 @@
 package clickup
 
-import "errors"
+import (
+	"errors"
+)
 
 type UserCache []User
 type SpaceCache []Space
 
 // Iteratively finds an User in the cache by a condition
-func (uc UserCache) Find(callback func(User) bool) (User, error) {
-	for _, user := range uc {
+func (uc *UserCache) Find(callback func(User) bool) (User, error) {
+	for _, user := range *uc {
 		if callback(user) {
 			return user, nil
 		}
@@ -16,8 +18,8 @@ func (uc UserCache) Find(callback func(User) bool) (User, error) {
 }
 
 // Iteratively finds a Space in the cache by a condition
-func (sc SpaceCache) Find(callback func(Space) bool) (Space, error) {
-	for _, space := range sc {
+func (sc *SpaceCache) Find(callback func(Space) bool) (Space, error) {
+	for _, space := range *sc {
 		if callback(space) {
 			return space, nil
 		}
@@ -26,13 +28,19 @@ func (sc SpaceCache) Find(callback func(Space) bool) (Space, error) {
 }
 
 // Adds a Space to the cache
-func (sc SpaceCache) Add(space Space) SpaceCache {
-	sc = append(sc, space)
+func (sc *SpaceCache) Add(space Space) *SpaceCache {
+	*sc = append((*sc), space)
+	return sc
+}
+
+func (sc *SpaceCache) Remove(index int) *SpaceCache {
+	(*sc)[len(*sc)-1], (*sc)[index] = (*sc)[index], (*sc)[len(*sc)-1]
+	(*sc) = (*sc)[:len(*sc)-1]
 	return sc
 }
 
 // Basic cache structure
 type Cache struct {
-	Users  UserCache
-	Spaces SpaceCache
+	Users  *UserCache
+	Spaces *SpaceCache
 }

@@ -61,5 +61,9 @@ func New(config Config) (*Client, error) {
 
 	return &Client{
 		AccessToken: config.Token,
+		Cache: Cache{
+			Users:  &UserCache{},
+			Spaces: &SpaceCache{},
+		},
 	}, nil
 }
