@@ -43,3 +43,25 @@ func (space *Space) Create(client *Client, teamId string) (Space, error) {
 	client.Cache.Spaces.Add(newSpace)
 	return newSpace, nil
 }
+
+func (space *Space) Delete(client *Client) error {
+	err := request.MakeRequest(request.CustomRequest{
+		Method:      "DELETE",
+		URL:         fmt.Sprintf("%s/space/%s", constants.BASE_URL, space.Id),
+		AccessToken: client.AccessToken,
+		Value:       &map[string]string{},
+	})
+	if err != nil {
+		return err
+	}
+
+	targetIndex := -1
+	for index, element := range *client.Cache.Spaces {
+		if element.Id == space.Id {
+			targetIndex = index
+		}
+	}
+
+	client.Cache.Spaces.Remove(targetIndex)
+	return nil
+}
