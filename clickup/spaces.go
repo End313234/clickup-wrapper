@@ -44,6 +44,7 @@ func (space *Space) Create(client *Client, teamId string) (Space, error) {
 	return newSpace, nil
 }
 
+// Deletes a Space by its Id
 func (space *Space) Delete(client *Client) error {
 	err := request.MakeRequest(request.CustomRequest{
 		Method:      "DELETE",
