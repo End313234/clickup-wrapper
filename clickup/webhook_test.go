@@ -6,7 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWebhook_Delete(t *testing.T) {
+// Add test case (Failure)
+func TestWebhook_Delete_Success(t *testing.T) {
 	chk := assert.New(t)
 
 	client, err := New(Config{
@@ -33,7 +34,28 @@ func TestWebhook_Delete(t *testing.T) {
 	chk.Condition(func() (success bool) { return len(beforeDeleting) > len(afterDeleting) })
 }
 
-func TestWebhook_Update(t *testing.T) {
+func TestWebhook_Delete_Failure(t *testing.T) {
+	chk := assert.New(t)
+
+	client, err := New(Config{
+		Token: CLIENT_TOKEN,
+	})
+	chk.NoError(err)
+
+	team, err := client.FetchTeam("31026359")
+	chk.NoError(err)
+	chk.Equal("31026359", team.Id)
+
+	webhooks := []Webhook{
+		{}, // Empty webhook
+	}
+
+	// Delete last webhook
+	err = webhooks[len(webhooks)-1].Delete(client)
+	chk.Error(err)
+}
+
+func TestWebhook_Update_Success(t *testing.T) {
 	chk := assert.New(t)
 
 	client, err := New(Config{
@@ -55,4 +77,29 @@ func TestWebhook_Update(t *testing.T) {
 	})
 	chk.NoError(err)
 	chk.Equal("active", updatedWebhook.Health.Status)
+}
+
+func TestWebhook_Update_Failure(t *testing.T) {
+	chk := assert.New(t)
+
+	client, err := New(Config{
+		Token: CLIENT_TOKEN,
+	})
+	chk.NoError(err)
+
+	team, err := client.FetchTeam("31026359")
+	chk.NoError(err)
+	chk.Equal("31026359", team.Id)
+
+	webhook, err := team.GetWebhooks(client)
+	chk.NoError(err)
+	chk.Condition(func() (success bool) { return len(webhook) > 0 })
+
+	// Update last webhook
+	updatedWebhook, err := webhook[len(webhook)-1].Update(client, UpdateWebhookRequest{
+		Events: []Event{"a"},
+		Status: "active",
+	})
+	chk.Error(err)
+	chk.Exactly(Webhook{}, updatedWebhook)
 }
