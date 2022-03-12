@@ -74,7 +74,7 @@ func (client *Client) GetTeams() ([]Team, error) {
 		Value:       &teams,
 	})
 	if err != nil {
-		return teams.Teams, err
+		return []Team{}, err
 	}
 
 	client.Cache.Teams = (*TeamCache)(&teams.Teams)

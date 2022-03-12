@@ -82,3 +82,35 @@ func TestGetWebhooks_Failure(t *testing.T) {
 	chk.Error(err)
 	chk.Exactly([]Webhook{}, webhooks)
 }
+
+func TestGetSpaces_Success(t *testing.T) {
+	chk := assert.New(t)
+
+	client, err := New(Config{
+		Token: CLIENT_TOKEN,
+	})
+	chk.NoError(err)
+
+	team, err := client.FetchTeam("31026359")
+	chk.NoError(err)
+	chk.Equal("31026359", team.Id)
+
+	spaces, err := team.GetSpaces(client, false)
+	chk.NoError(err)
+	chk.Condition(func() (success bool) { return len(spaces) > 0 })
+}
+
+func TestGetSpaces_Failure(t *testing.T) {
+	chk := assert.New(t)
+
+	client, err := New(Config{
+		Token: CLIENT_TOKEN,
+	})
+	chk.NoError(err)
+
+	team := Team{} // Empty team
+
+	spaces, err := team.GetSpaces(client, false)
+	chk.Error(err)
+	chk.Exactly([]Space{}, spaces)
+}
