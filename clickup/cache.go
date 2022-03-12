@@ -6,6 +6,8 @@ import (
 
 type UserCache []User
 type SpaceCache []Space
+type WebhookCache []Webhook
+type TeamCache []Team
 
 // Iteratively finds an User in the cache by a condition
 func (uc *UserCache) Find(callback func(User) bool) (User, error) {
@@ -33,14 +35,63 @@ func (sc *SpaceCache) Add(space Space) *SpaceCache {
 	return sc
 }
 
+// Removes a Space from the cache
 func (sc *SpaceCache) Remove(index int) *SpaceCache {
 	(*sc)[len(*sc)-1], (*sc)[index] = (*sc)[index], (*sc)[len(*sc)-1]
 	(*sc) = (*sc)[:len(*sc)-1]
 	return sc
 }
 
+// Iteratively finds a Webhook in the cache by a condition
+func (wh *WebhookCache) Find(callback func(Webhook) bool) (Webhook, error) {
+	for _, webhook := range *wh {
+		if callback(webhook) {
+			return webhook, nil
+		}
+	}
+	return Webhook{}, errors.New("webhook not found")
+}
+
+// Adds a Webhook to the cache
+func (wh *WebhookCache) Add(webhook Webhook) *WebhookCache {
+	*wh = append((*wh), webhook)
+	return wh
+}
+
+// Removes a Webhook from the cache
+func (wh *WebhookCache) Remove(index int) *WebhookCache {
+	(*wh)[len(*wh)-1], (*wh)[index] = (*wh)[index], (*wh)[len(*wh)-1]
+	(*wh) = (*wh)[:len(*wh)-1]
+	return wh
+}
+
+// Updates a Webhook in the cache
+func (wh *WebhookCache) Update(webhook Webhook) *WebhookCache {
+	for index, element := range *wh {
+		if element.Id == webhook.Id {
+			(*wh)[index] = webhook
+			break
+		}
+	}
+
+	return wh
+}
+
+// Finds a Team in the cache
+func (tc *TeamCache) Find(callback func(Team) bool) (Team, error) {
+	for _, element := range *tc {
+		if callback(element) {
+			return element, nil
+		}
+	}
+
+	return Team{}, errors.New("team not found")
+}
+
 // Basic cache structure
 type Cache struct {
-	Users  *UserCache
-	Spaces *SpaceCache
+	Users    *UserCache
+	Spaces   *SpaceCache
+	Webhooks *WebhookCache
+	Teams    *TeamCache
 }
