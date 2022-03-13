@@ -44,10 +44,13 @@ func TestSpace_Delete_Success(t *testing.T) {
 	})
 	chk.NoError(err)
 
-	space, err := client.GetSpace("54904366")
+	// Create a new Space do delete
+	newSpace := Space{Name: "to_delete"}
+	newSpace, err = newSpace.Create(client, "31026359")
 	chk.NoError(err)
+	chk.Equal("to_delete", newSpace.Name)
 
-	err = space.Delete(client)
+	err = newSpace.Delete(client)
 	chk.NoError(err)
 }
 

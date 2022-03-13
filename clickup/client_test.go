@@ -70,7 +70,7 @@ func TestClient_GetTeams_Failure(t *testing.T) {
 
 	client, _ := New(Config{
 		Token: "invalid token",
-	}) // Not checking for errors this time since the error should be thrown by `GetTeams`
+	}) // Error must be thrown by `GetTeams`
 
 	teams, err := client.GetTeams()
 	chk.Error(err)
