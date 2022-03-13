@@ -67,3 +67,41 @@ func TestSpace_Delete_Failure(t *testing.T) {
 	err = space.Delete(client)
 	chk.Error(err)
 }
+
+func TestSpace_Update_Success(t *testing.T) {
+	chk := assert.New(t)
+
+	client, err := New(Config{
+		Token: CLIENT_TOKEN,
+	})
+	chk.NoError(err)
+
+	space, err := client.GetSpace("54904345")
+	chk.NoError(err)
+	chk.Equal("54904345", space.Id)
+
+	updatedSpace, err := space.Update(Space{
+		Name: "updated-test",
+	}, client)
+	chk.NoError(err)
+	chk.Equal("updated-test", updatedSpace.Name)
+}
+
+func TestSpace_Update_Failure(t *testing.T) {
+	chk := assert.New(t)
+
+	client, err := New(Config{
+		Token: CLIENT_TOKEN,
+	})
+	chk.NoError(err)
+
+	space, err := client.GetSpace("54904345")
+	chk.NoError(err)
+	chk.Equal("54904345", space.Id)
+
+	updatedSpace, err := space.Update(Space{
+		Id: "a",
+	}, client) // Try to specify an Id
+	chk.Error(err)
+	chk.Exactly(Space{}, updatedSpace)
+}

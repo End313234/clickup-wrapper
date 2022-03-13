@@ -42,6 +42,18 @@ func (sc *SpaceCache) Remove(index int) *SpaceCache {
 	return sc
 }
 
+// Updates a Space in the cache
+func (sc *SpaceCache) Update(space Space) *SpaceCache {
+	for index, element := range *sc {
+		if element.Id == space.Id {
+			(*sc)[index] = space
+			break
+		}
+	}
+
+	return sc
+}
+
 // Iteratively finds a Webhook in the cache by a condition
 func (wh *WebhookCache) Find(callback func(Webhook) bool) (Webhook, error) {
 	for _, webhook := range *wh {

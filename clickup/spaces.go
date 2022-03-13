@@ -2,6 +2,7 @@ package clickup
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -65,4 +66,30 @@ func (space *Space) Delete(client *Client) error {
 
 	client.Cache.Spaces.Remove(targetIndex)
 	return nil
+}
+
+func (space *Space) Update(newSpace Space, client *Client) (Space, error) {
+	var updatedSpace Space
+
+	if newSpace.Id != "" {
+		return Space{}, errors.New("you shouldn't specify a new id")
+	}
+
+	data, _ := json.Marshal(newSpace)
+	reader := ioutil.NopCloser(strings.NewReader(string(data[:])))
+	defer reader.Close()
+
+	err := request.MakeRequest(request.CustomRequest{
+		Method:      "PUT",
+		URL:         fmt.Sprintf("%s/space/%s", constants.BASE_URL, space.Id),
+		AccessToken: client.AccessToken,
+		Value:       &updatedSpace,
+		Body:        reader,
+	})
+	if err != nil {
+		return Space{}, err
+	}
+
+	client.Cache.Spaces.Update(updatedSpace)
+	return updatedSpace, nil
 }
